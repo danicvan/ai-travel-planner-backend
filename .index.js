@@ -38,4 +38,8 @@ app.post("/api/chat", async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Something went wrong. Please try again." });
     }
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 })

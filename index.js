@@ -21,11 +21,8 @@ const response = await openai.chat.completions.create({
     ],
 });
 
-const jsonParser = bodyParser.json();
-const urlencodedParser = bordyParser.urlencoded({ extended: false });
-
-app.post('/api/chat', urlencodedParser, async (req, res) => {
-    console.log(`This receive a message: ${message}`);
+app.post('/api/chat', (req, res) => {
+    res.send(`This is another test response.`);
 });
 
 app.listen(port, () => {

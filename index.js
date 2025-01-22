@@ -1,14 +1,35 @@
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
+import OpenAI from "openai";
 
 const app = express();
 const port = process.env.PORT || 6000;
 
-express.json();
+app.use(express.json());
 
 app.post('/api/chat', async (req, res) => {
-    req.send(res.json({ message: "Hello World!" }));
+    const { message } = req.body;
+
+    if (!message) {
+        return res.status(400).json({ error: "There is necessary send a message." });
+    }
+
+    const openai = new OpenAI({
+        apiKey: process.env.API_KEY
+    });
+
+    const request = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [{
+            role: "user",
+            content: message,
+            stream: true
+        }]
+    });
+
+    const reply = request.choices[0]?.message.content || "There is no answer by gpt-4o-mini";
+    res.json({ reply });
 });
 
 app.listen(port, () => {
